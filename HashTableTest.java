@@ -24,9 +24,9 @@ class Node {
 
 // Classe HashTable: Implementa a tabela hash com resolução de colisões por lista encadeada
 class HashTable {
-    private Node[] table; // Vetor de listas encadeadas
-    private int size; // Tamanho da tabela
-    private int collisions; // Contador de colisões
+    private Node[] table;
+    private int size;
+    private int collisions;
 
     public HashTable(int size) {
         this.size = size;
@@ -50,7 +50,7 @@ class HashTable {
             }
             return sum % size;
         }
-        return -1; // Default (nunca deve ocorrer)
+        return -1;
     }
 
     // Método insert: Insere um registro na tabela hash, resolvendo colisões
@@ -93,33 +93,32 @@ class HashTable {
 // Classe HashTableTest: Testa as tabelas hash com diferentes combinações de tamanhos e funções hash
 public class HashTableTest {
     public static void main(String[] args) {
-        int[] tableSizes = {1000, 10000, 100000}; // Tamanhos das tabelas
-        int[] dataSizes = {10000, 100000, 1000000}; // Tamanhos dos conjuntos de dados
-        String[] hashMethods = {"divisao", "multiplicacao", "dobramento"}; // Métodos hash
+        int[] tableSizes = {1000, 10000, 100000};
+        int[] dataSizes = {10000, 100000, 1000000};
+        String[] hashMethods = {"divisao", "multiplicacao", "dobramento"};
 
         for (int tableSize : tableSizes) {
             for (int dataSize : dataSizes) {
                 System.out.println("Tabela: " + tableSize + ", Dados: " + dataSize);
 
-                // Geração de dados
                 Registro[] data = generateData(dataSize);
+                int dataLength = dataSize; 
 
                 for (String method : hashMethods) {
                     HashTable hashTable = new HashTable(tableSize);
 
-                    // Inserção
                     long startInsert = System.nanoTime();
-                    for (Registro reg : data) {
-                        hashTable.insert(reg, method);
+                    for (int i = 0; i < dataLength; i++) {
+                        hashTable.insert(data[i], method);
                     }
                     long endInsert = System.nanoTime();
                     System.out.println("Método: " + method + ", Tempo de Inserção: " + (endInsert - startInsert) + " ns");
                     System.out.println("Colisões: " + hashTable.getCollisions());
 
-                    // Busca
                     long startSearch = System.nanoTime();
                     for (int i = 0; i < 5; i++) {
-                        hashTable.search(data[new Random().nextInt(data.length)].codigo, method);
+                        int randomIndex = new Random().nextInt(dataLength);
+                        hashTable.search(data[randomIndex].codigo, method);
                     }
                     long endSearch = System.nanoTime();
                     System.out.println("Tempo de Busca: " + (endSearch - startSearch) + " ns");
@@ -131,12 +130,13 @@ public class HashTableTest {
 
     // Método generateData: Gera registros com códigos aleatórios de 9 dígitos
     public static Registro[] generateData(int size) {
-        Random random = new Random(42); // Seed fixa para dados replicáveis
-        Registro[] data = new Registro[size];
+        Registro[] vetor = new Registro[size];
+        Random random = new Random(42);
+        int vetorSize = size;
 
-        for (int i = 0; i < size; i++) {
-            data[i] = new Registro(random.nextInt(900000000) + 100000000);
+        for (int i = 0; i < vetorSize; i++) {
+            vetor[i] = new Registro(random.nextInt(900000000) + 100000000);
         }
-        return data;
+        return vetor;
     }
 }
