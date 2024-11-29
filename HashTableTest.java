@@ -102,7 +102,7 @@ public class HashTableTest {
                 System.out.println("Tabela: " + tableSize + ", Dados: " + dataSize);
 
                 Registro[] data = generateData(dataSize);
-                int dataLength = dataSize; 
+                int dataLength = dataSize;
 
                 for (String method : hashMethods) {
                     HashTable hashTable = new HashTable(tableSize);
